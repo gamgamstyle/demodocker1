@@ -7,17 +7,20 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copy all files
+# Copy everything else
 COPY . .
 
-# Ensure environment variables are available
+# Set environment to production
 ENV NODE_ENV=production
+
+# Azure expects apps to listen on $PORT
+ENV PORT=8080
 
 # Build the Next.js app
 RUN npm run build
 
-# Expose port used by Next.js
-EXPOSE 3000
+# Expose the port for Azure
+EXPOSE 8080
 
-# Start the app
-CMD ["npm", "start"]
+# Start the Next.js app with the correct port
+CMD ["npx", "next", "start", "-p", "8080"]
