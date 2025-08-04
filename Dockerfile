@@ -1,24 +1,28 @@
-FROM node:20-alpine
+# Build stage
+FROM node:lts-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy only package files first and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-# Copy rest of the app
 COPY . .
-
-# Set production mode and port for Azure
-ENV NODE_ENV=production
-ENV PORT=8080
-
-# Build Next.js app
 RUN npm run build
 
-# Expose Azure port
+# Production stage
+FROM node:lts-alpine
+
+WORKDIR /app
+
+# Copy only what's needed
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+
+ENV NODE_ENV=production
+ENV PORT=8080
 EXPOSE 8080
 
-# Use npx to start Next.js directly on correct port
+# Safer than relying on node_modules/.bin/next
 CMD ["npx", "next", "start", "-p", "8080"]
