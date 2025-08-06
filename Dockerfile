@@ -21,4 +21,4 @@ RUN npm run build
 EXPOSE 8080
 
 # Start the app on port 8080
-CMD ["npm", "start"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "8080"]
