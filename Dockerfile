@@ -1,19 +1,24 @@
 FROM node:lts-alpine
 
+# Set working directory
 WORKDIR /app
 
-# Install only production dependencies
+# Copy dependencies and install
 COPY package*.json ./
 RUN npm ci --omit=dev
 
-# Copy the rest of the app
+# Copy everything else
 COPY . .
 
-ENV NODE_ENV=production
-ENV PORT=8080
-
+# Build Next.js app
 RUN npm run build
 
+# Tell Azure the port we want to use
+ENV PORT=8080
+ENV NODE_ENV=production
+
+# Tell Azure and Next.js to listen on the correct port
 EXPOSE 8080
 
-CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "8080"]
+# Start app
+CMD ["npx", "next", "start", "-p", "8080"]
