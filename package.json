@@ -2,12 +2,13 @@
   "name": "mynextapp1",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "node node_modules/next/dist/bin/next start -p 8080",
-    "lint": "next lint"
-  },
+"scripts": {
+  "dev": "next dev --turbopack",
+  "build": "next build",
+  "start:prod": "node node_modules/next/dist/bin/next start -p 8080",
+  "start": "npm run start:prod",
+  "lint": "next lint"
+},
   "dependencies": {
     "react": "19.1.0",
     "react-dom": "19.1.0",

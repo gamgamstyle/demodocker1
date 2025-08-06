@@ -1,5 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi) + gam
 
+# gam
+*copy*
+
 # Node & Package Manager
 /node_modules
 /public/hot
