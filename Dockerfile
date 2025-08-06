@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy dependencies and install
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 # Copy everything else
 COPY . .
@@ -21,4 +21,4 @@ ENV NODE_ENV=production
 EXPOSE 8080
 
 # Start app
-CMD ["npx", "next", "start", "-p", "8080"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "8080"]
