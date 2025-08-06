@@ -1,26 +1,24 @@
-# Build stage
-FROM node:lts-alpine AS builder
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-# Production stage
 FROM node:lts-alpine
+
+# Set working directory
 WORKDIR /app
 
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
+# Copy package files and install dependencies
+COPY package*.json ./
+RUN npm install
 
-# Install only production dependencies
-RUN npm ci --only=production
+# Copy all files
+COPY . .
 
+# Set environment variable
 ENV NODE_ENV=production
 ENV PORT=8080
+
+# Build the app
+RUN npm run build
+
+# Expose the correct port
 EXPOSE 8080
 
-CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "8080"]
+# Start the app on port 8080
+CMD ["npm", "start"]
