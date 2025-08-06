@@ -1,24 +1,19 @@
 FROM node:lts-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Install only production dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm ci --omit=dev
 
-# Copy all files
+# Copy the rest of the app
 COPY . .
 
-# Set environment variable
 ENV NODE_ENV=production
 ENV PORT=8080
 
-# Build the app
 RUN npm run build
 
-# Expose the correct port
 EXPOSE 8080
 
-# Start the app on port 8080
 CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "8080"]
